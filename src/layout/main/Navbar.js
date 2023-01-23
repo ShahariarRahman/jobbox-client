@@ -1,10 +1,18 @@
 import { signOut } from "firebase/auth";
 import React from "react";
+import { useSelector } from "react-redux";
 
 import { Link, useLocation } from "react-router-dom";
+import auth from "../../firebase/firebase.config";
 
 const Navbar = () => {
   const { pathname } = useLocation();
+
+  const { email } = useSelector((state) => state.auth);
+
+  const handleSignOut = () => {
+    signOut(auth);
+  };
 
   return (
     <nav
@@ -12,24 +20,33 @@ const Navbar = () => {
         pathname === "/" ? null : "bg-white"
       }`}
     >
-      <ul className='max-w-7xl mx-auto flex gap-3 h-full items-center'>
-        <li className='flex-auto font-semibold text-2xl'>
-          <Link to='/'>JobBox</Link>
+      <ul className="max-w-7xl mx-auto flex gap-3 h-full items-center">
+        <li className="flex-auto font-semibold text-2xl">
+          <Link to="/">JobBox</Link>
         </li>
         <li>
-          <Link className='hover:text-primary' to='/jobs'>
+          <Link className="hover:text-primary transition-all" to="/jobs">
             Jobs
           </Link>
         </li>
 
-        <li>
-          <Link
-            className='border border-black px-2 py-1 rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all '
-            to='/login'
+        {email ? (
+          <button
+            onClick={handleSignOut}
+            className=" hover:text-primary transition-all "
           >
-            Login
-          </Link>
-        </li>
+            Log Out
+          </button>
+        ) : (
+          <li>
+            <Link
+              className="border border-black px-2 py-1 rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all "
+              to="/login"
+            >
+              Login
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
