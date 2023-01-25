@@ -1,8 +1,12 @@
 import React from "react";
-
 import meeting from "../assets/meeting.jpg";
 import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
+import { useParams } from "react-router-dom";
+import { useJobByIdQuery } from "../features/job/jobApi";
 const JobDetails = () => {
+  const { id } = useParams();
+  const { data, isLoading, isError } = useJobByIdQuery(id);
+
   const {
     companyName,
     position,
@@ -17,7 +21,7 @@ const JobDetails = () => {
     overview,
     queries,
     _id,
-  } = {};
+  } = data?.data || {};
 
   return (
     <div className="pt-14 grid grid-cols-12 gap-5">
@@ -37,8 +41,8 @@ const JobDetails = () => {
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Skills</h1>
             <ul>
-              {skills?.map((skill) => (
-                <li className="flex items-center">
+              {skills?.map((skill, i) => (
+                <li key={i} className="flex items-center">
                   <BsArrowRightShort /> <span>{skill}</span>
                 </li>
               ))}
@@ -49,8 +53,8 @@ const JobDetails = () => {
               Requirements
             </h1>
             <ul>
-              {requirements?.map((skill) => (
-                <li className="flex items-center">
+              {requirements?.map((skill, i) => (
+                <li key={i} className="flex items-center">
                   <BsArrowRightShort /> <span>{skill}</span>
                 </li>
               ))}
@@ -61,8 +65,8 @@ const JobDetails = () => {
               Responsibilities
             </h1>
             <ul>
-              {responsibilities?.map((skill) => (
-                <li className="flex items-center">
+              {responsibilities?.map((skill, i) => (
+                <li key={i} className="flex items-center">
                   <BsArrowRightShort /> <span>{skill}</span>
                 </li>
               ))}
@@ -77,11 +81,14 @@ const JobDetails = () => {
             </h1>
             <div className="text-primary my-2">
               {queries?.map(({ question, email, reply, id }) => (
-                <div>
+                <div key={id}>
                   <small>{email}</small>
                   <p className="text-lg font-medium">{question}</p>
-                  {reply?.map((item) => (
-                    <p className="flex items-center gap-2 relative left-5">
+                  {reply?.map((item, i) => (
+                    <p
+                      key={i}
+                      className="flex items-center gap-2 relative left-5"
+                    >
                       <BsArrowReturnRight /> {item}
                     </p>
                   ))}
@@ -160,7 +167,11 @@ const JobDetails = () => {
           </div>
           <div>
             <p>Website</p>
-            <a className="font-semibold text-lg" href="#">
+            <a
+              className="font-semibold text-lg"
+              target="blank"
+              href="http://www.google.com"
+            >
               https://website.com
             </a>
           </div>
