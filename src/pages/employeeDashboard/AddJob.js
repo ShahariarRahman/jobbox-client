@@ -1,9 +1,17 @@
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { FiTrash } from "react-icons/fi";
+import { useSelector } from "react-redux";
 
 const AddJob = () => {
-  const { handleSubmit, register, control } = useForm();
+  const {
+    user: { companyName },
+  } = useSelector((state) => state.auth);
+  const { handleSubmit, register, control } = useForm({
+    defaultValues: {
+      companyName,
+    },
+  });
   const {
     fields: resFields,
     append: resAppend,
