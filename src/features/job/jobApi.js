@@ -16,7 +16,6 @@ const jobApi = apiSlice.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Jobs"],
     }),
     getJobs: builder.query({
       query: () => ({
