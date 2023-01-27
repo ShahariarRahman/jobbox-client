@@ -6,11 +6,14 @@ import {
   useApplyMutation,
   useJobByIdQuery,
   useQuestionMutation,
+  useReplyMutation,
 } from "../features/job/jobApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 const JobDetails = () => {
+  const [reply, setReply] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
   const { register, handleSubmit, reset } = useForm();
@@ -18,6 +21,7 @@ const JobDetails = () => {
   const navigate = useNavigate();
   const [apply] = useApplyMutation();
   const [sendQuestion] = useQuestionMutation();
+  const [sendReply] = useReplyMutation();
   const {
     companyName,
     position,
@@ -49,6 +53,14 @@ const JobDetails = () => {
       jobId: _id,
     };
     apply(data);
+  };
+
+  const handleReply = (id) => {
+    const data = {
+      reply,
+      userId: id,
+    };
+    sendReply(data);
   };
 
   const handleQuestion = (data) => {
@@ -121,8 +133,8 @@ const JobDetails = () => {
               General Q&A
             </h1>
             <div className="text-primary my-2">
-              {queries?.map(({ question, email, reply, id }) => (
-                <div key={id}>
+              {queries?.map(({ question, email, reply, id }, i) => (
+                <div key={i}>
                   <small>{email}</small>
                   <p className="text-lg font-medium">{question}</p>
                   {reply?.map((item, i) => (
@@ -140,10 +152,12 @@ const JobDetails = () => {
                         placeholder="Reply"
                         type="text"
                         className="w-full"
+                        onBlur={(e) => setReply(e.target.value)}
                       />
                       <button
                         className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
                         type="button"
+                        onClick={() => handleReply(id)}
                       >
                         <BsArrowRightShort size={30} />
                       </button>
