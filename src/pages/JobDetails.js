@@ -5,9 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useApplyMutation, useJobByIdQuery } from "../features/job/jobApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import { useForm } from "react-hook-form";
 const JobDetails = () => {
   const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
+  const { register, handleSubmit, reset } = useForm();
   const { data, isLoading } = useJobByIdQuery(id);
   const navigate = useNavigate();
   const [apply] = useApplyMutation();
@@ -36,13 +38,17 @@ const JobDetails = () => {
       navigate("/register");
       return;
     }
-
     const data = {
       userId: user._id,
       email: user.email,
       jobId: _id,
     };
     apply(data);
+  };
+
+  const handleQuestion = (data) => {
+    console.log(data);
+    reset();
   };
 
   return (
@@ -129,20 +135,22 @@ const JobDetails = () => {
                 </div>
               ))}
             </div>
-
-            <div className="flex gap-3 my-5">
-              <input
-                placeholder="Ask a question..."
-                type="text"
-                className="w-full"
-              />
-              <button
-                className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
-                type="button"
-              >
-                <BsArrowRightShort size={30} />
-              </button>
-            </div>
+            <form onSubmit={handleSubmit(handleQuestion)}>
+              <div className="flex gap-3 my-5">
+                <input
+                  placeholder="Ask a question..."
+                  type="text"
+                  className="w-full"
+                  {...register("question")}
+                />
+                <button
+                  className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
+                  type="submit"
+                >
+                  <BsArrowRightShort size={30} />
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
