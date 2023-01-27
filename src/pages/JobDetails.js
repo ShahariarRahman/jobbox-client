@@ -2,7 +2,11 @@ import React from "react";
 import meeting from "../assets/meeting.jpg";
 import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useApplyMutation, useJobByIdQuery } from "../features/job/jobApi";
+import {
+  useApplyMutation,
+  useJobByIdQuery,
+  useQuestionMutation,
+} from "../features/job/jobApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -13,6 +17,7 @@ const JobDetails = () => {
   const { data, isLoading } = useJobByIdQuery(id);
   const navigate = useNavigate();
   const [apply] = useApplyMutation();
+  const [sendQuestion] = useQuestionMutation();
   const {
     companyName,
     position,
@@ -47,7 +52,13 @@ const JobDetails = () => {
   };
 
   const handleQuestion = (data) => {
-    console.log(data);
+    const queData = {
+      ...data,
+      userId: user._id,
+      email: user.email,
+      jobId: _id,
+    };
+    sendQuestion(queData);
     reset();
   };
 
