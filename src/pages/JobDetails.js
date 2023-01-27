@@ -17,11 +17,13 @@ const JobDetails = () => {
   const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
   const { register, handleSubmit, reset } = useForm();
-  const { data, isLoading } = useJobByIdQuery(id);
+  const { data, isLoading } = useJobByIdQuery(id, {
+    pollingInterval: 10000,
+  });
   const navigate = useNavigate();
   const [apply] = useApplyMutation();
   const [sendQuestion] = useQuestionMutation();
-  const [sendReply] = useReplyMutation();
+  const [sendReply, { isSuccess }] = useReplyMutation();
   const {
     companyName,
     position,
