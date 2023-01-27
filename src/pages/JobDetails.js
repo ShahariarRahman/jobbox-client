@@ -1,12 +1,15 @@
 import React from "react";
 import meeting from "../assets/meeting.jpg";
 import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useJobByIdQuery } from "../features/job/jobApi";
+import { useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 const JobDetails = () => {
+  const { user } = useSelector((state) => state.auth);
   const { id } = useParams();
   const { data, isLoading } = useJobByIdQuery(id);
-
+  const navigate = useNavigate();
   const {
     companyName,
     position,
@@ -23,6 +26,23 @@ const JobDetails = () => {
     _id,
   } = data?.data || {};
 
+  const handleApply = () => {
+    if (user.role === "employer") {
+      toast.error("You need an candidate account to apply.");
+      return;
+    }
+    if (user.role === "") {
+      navigate("/register");
+      return;
+    }
+
+    const data = {
+      userId: user._id,
+      email: user.email,
+      jobId: _id,
+    };
+  };
+
   return (
     <div className="pt-14 grid grid-cols-12 gap-5">
       <div className="col-span-9 mb-10">
@@ -32,7 +52,9 @@ const JobDetails = () => {
         <div className="space-y-5">
           <div className="flex justify-between items-center mt-5">
             <h1 className="text-xl font-semibold text-primary">{position}</h1>
-            <button className="btn">Apply</button>
+            <button onClick={handleApply} className="btn">
+              Apply
+            </button>
           </div>
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Overview</h1>
