@@ -134,34 +134,42 @@ const JobDetails = () => {
                     </p>
                   ))}
 
-                  <div className="flex gap-3 my-5">
-                    <input placeholder="Reply" type="text" className="w-full" />
-                    <button
-                      className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
-                      type="button"
-                    >
-                      <BsArrowRightShort size={30} />
-                    </button>
-                  </div>
+                  {user.role === "employer" && (
+                    <div className="flex gap-3 my-5">
+                      <input
+                        placeholder="Reply"
+                        type="text"
+                        className="w-full"
+                      />
+                      <button
+                        className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
+                        type="button"
+                      >
+                        <BsArrowRightShort size={30} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-            <form onSubmit={handleSubmit(handleQuestion)}>
-              <div className="flex gap-3 my-5">
-                <input
-                  placeholder="Ask a question..."
-                  type="text"
-                  className="w-full"
-                  {...register("question")}
-                />
-                <button
-                  className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
-                  type="submit"
-                >
-                  <BsArrowRightShort size={30} />
-                </button>
-              </div>
-            </form>
+            {user.role === "candidate" && (
+              <form onSubmit={handleSubmit(handleQuestion)}>
+                <div className="flex gap-3 my-5">
+                  <input
+                    placeholder="Ask a question..."
+                    type="text"
+                    className="w-full"
+                    {...register("question")}
+                  />
+                  <button
+                    className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
+                    type="submit"
+                  >
+                    <BsArrowRightShort size={30} />
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>
