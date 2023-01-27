@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { useJobByIdQuery } from "../features/job/jobApi";
 const JobDetails = () => {
   const { id } = useParams();
-  const { data, isLoading, isError } = useJobByIdQuery(id);
+  const { data, isLoading } = useJobByIdQuery(id);
 
   const {
     companyName,
